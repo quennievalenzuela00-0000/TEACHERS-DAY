@@ -1,0 +1,527 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Happy Teachers Day Portfolio</title>
+    <style>
+        body {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Comic Sans MS', cursive, sans-serif;
+            background: linear-gradient(135deg, #ff9a9e 0%, #fecfef 50%, #fecfef 100%);
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        .greeting-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(45deg, #ff69b4, #ff1493);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            animation: fadeOut 4s ease-in-out forwards;
+        }
+
+        .greeting-text {
+            color: white;
+            font-size: 3rem;
+            text-align: center;
+            animation: bounce 2s ease-in-out;
+            text-shadow: 2px 2px 8px rgba(255,20,147,0.5);
+        }
+
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
+            40% { transform: translateY(-30px); }
+            60% { transform: translateY(-15px); }
+        }
+
+        @keyframes fadeOut {
+            0%, 70% { opacity: 1; }
+            100% { opacity: 0; visibility: hidden; }
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+            text-align: center;
+        }
+
+        .header {
+            margin-bottom: 3rem;
+            color: #ff1493;
+        }
+
+        .header h1 {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            text-shadow: 2px 2px 8px rgba(255,20,147,0.3);
+            color: #ff1493;
+        }
+
+        .envelope-container {
+            margin: 3rem 0;
+            perspective: 1000px;
+        }
+
+        .envelope {
+            width: 300px;
+            height: 200px;
+            margin: 0 auto;
+            position: relative;
+            cursor: pointer;
+            transition: transform 0.3s ease;
+        }
+
+        .envelope:hover {
+            transform: scale(1.05) rotateY(5deg);
+        }
+
+        .envelope-back {
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(45deg, #ff69b4, #ff1493);
+            border-radius: 15px;
+            box-shadow: 0 15px 40px rgba(255,20,147,0.4);
+            border: 3px solid #ffb6c1;
+        }
+
+        .envelope-flap {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 50%;
+            background: linear-gradient(45deg, #ff1493, #dc143c);
+            clip-path: polygon(0 0, 100% 0, 50% 100%);
+            border-radius: 15px 15px 0 0;
+            transition: transform 0.5s ease;
+            transform-origin: top center;
+            border: 2px solid #ffb6c1;
+        }
+
+        .envelope.opened .envelope-flap {
+            transform: rotateX(-180deg);
+        }
+
+        .envelope-label {
+            position: absolute;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            color: white;
+            font-weight: bold;
+            font-size: 1.1rem;
+        }
+
+        .message-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.8);
+            z-index: 2000;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .message-content {
+            background: white;
+            padding: 2rem;
+            border-radius: 15px;
+            max-width: 500px;
+            text-align: center;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            animation: slideIn 0.5s ease-out;
+        }
+
+        @keyframes slideIn {
+            from { transform: translateY(-50px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+
+        .close-btn {
+            background: #ff6b6b;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 25px;
+            cursor: pointer;
+            margin-top: 1rem;
+            font-size: 1rem;
+        }
+
+        .close-btn:hover {
+            background: #ff5252;
+        }
+
+        .qa-section {
+            background: rgba(255,182,193,0.3);
+            backdrop-filter: blur(10px);
+            border-radius: 25px;
+            padding: 2rem;
+            margin: 2rem 0;
+            color: #ff1493;
+            border: 2px solid rgba(255,105,180,0.5);
+            box-shadow: 0 10px 30px rgba(255,20,147,0.2);
+        }
+
+        .question {
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+            color: #ff1493;
+            font-weight: bold;
+        }
+
+        .answer-buttons {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            margin-bottom: 1rem;
+        }
+
+        .btn {
+            background: linear-gradient(45deg, #ff69b4, #ff1493);
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 30px;
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            border: 2px solid #ffb6c1;
+            box-shadow: 0 5px 15px rgba(255,20,147,0.3);
+        }
+
+        .btn:hover {
+            transform: translateY(-3px) scale(1.05);
+            box-shadow: 0 8px 25px rgba(255,20,147,0.5);
+        }
+
+        .btn.no {
+            background: linear-gradient(45deg, #ff1493, #dc143c);
+        }
+
+        .answer-display {
+            background: rgba(255,182,193,0.4);
+            padding: 1rem;
+            border-radius: 15px;
+            margin-top: 1rem;
+            font-size: 1.2rem;
+            min-height: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 2px solid rgba(255,105,180,0.6);
+            color: #ff1493;
+            font-weight: bold;
+        }
+
+        .final-section {
+            background: linear-gradient(45deg, #ffb6c1, #ffc0cb, #ffb6c1);
+            color: #ff1493;
+            padding: 3rem;
+            border-radius: 25px;
+            margin-top: 3rem;
+            box-shadow: 0 20px 50px rgba(255,20,147,0.3);
+            border: 3px solid #ff69b4;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .final-section h2 {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            color: #ff1493;
+        }
+
+        .balloons {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        .balloon {
+            position: absolute;
+            font-size: 3rem;
+            animation: float 3s ease-in-out infinite;
+        }
+
+        .balloon1 {
+            top: 10%;
+            left: 10%;
+            animation-delay: 0s;
+            color: #ff69b4;
+        }
+
+        .balloon2 {
+            top: 20%;
+            right: 15%;
+            animation-delay: 0.5s;
+            color: #ff1493;
+        }
+
+        .balloon3 {
+            top: 60%;
+            left: 5%;
+            animation-delay: 1s;
+            color: #dc143c;
+        }
+
+        .balloon4 {
+            top: 70%;
+            right: 10%;
+            animation-delay: 1.5s;
+            color: #ff69b4;
+        }
+
+        .balloon5 {
+            top: 40%;
+            right: 50%;
+            animation-delay: 2s;
+            color: #ff1493;
+        }
+
+        @keyframes float {
+            0%, 100% { 
+                transform: translateY(0px) rotate(0deg); 
+            }
+            25% { 
+                transform: translateY(-20px) rotate(5deg); 
+            }
+            50% { 
+                transform: translateY(-10px) rotate(-3deg); 
+            }
+            75% { 
+                transform: translateY(-15px) rotate(3deg); 
+            }
+        }
+
+        .hearts {
+            font-size: 2rem;
+            animation: pulse 2s infinite;
+            position: relative;
+            z-index: 2;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.2); }
+        }
+
+        @media (max-width: 768px) {
+            .greeting-text { font-size: 2rem; }
+            .header h1 { font-size: 2rem; }
+            .envelope { width: 250px; height: 167px; }
+            .answer-buttons { flex-direction: column; align-items: center; }
+        }
+    </style>
+</head>
+<body>
+    <!-- Auto Greeting Overlay -->
+    <div class="greeting-overlay" id="greetingOverlay">
+        <div class="greeting-text">
+            🎉 HAPPY TEACHERS DAY! 🎉
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="header">
+            <h1>Teachers Day Portfolio</h1>
+            <p>A special tribute to our amazing teacher!</p>
+        </div>
+
+        <!-- Interactive Envelope -->
+        <div class="envelope-container">
+            <div class="envelope" id="envelope" onclick="openEnvelope()">
+                <div class="envelope-back"></div>
+                <div class="envelope-flap"></div>
+                <div class="envelope-label">Click to Open Message 💌</div>
+            </div>
+        </div>
+
+        <!-- Message Modal -->
+        <div class="message-modal" id="messageModal">
+            <div class="message-content">
+                <h2>💝 Special Message 💝</h2>
+                <p style="font-size: 1.3rem; color: #333; line-height: 1.6;">
+                    "SA SOBRA MO KABOOT SIR<br>
+                    WRA AKON MASABE CHAR"
+                </p>
+                <button class="btn" style="background: linear-gradient(45deg, #ff69b4, #ff1493); margin: 10px; padding: 12px 20px; border-radius: 25px; font-size: 1rem;" onclick="showPresidentMessage()">CLICK NEXT IF GUSTO MO MAGIN PRESIDENT SA DEBESMSCAT</button>
+                <button class="close-btn" onclick="closeMessage()">Close</button>
+            </div>
+        </div>
+
+        <!-- Special Question Modal -->
+        <div class="message-modal" id="specialQuestion" style="display: none;">
+            <div class="message-content" style="max-width: 600px;">
+                <h2>💅 Special Question 💅</h2>
+                <div class="question" style="color: #ff1493; margin-bottom: 2rem;">MAGANDA BA AKO SIR?</div>
+                <div class="answer-buttons" style="position: relative; height: 250px;">
+                    <button class="btn" onclick="answerSpecialYes()" style="position: absolute; top: 0; left: 50%; transform: translateX(-50%);">YES</button>
+                    <button class="btn no" id="specialNoBtn" onclick="answerSpecialNo()" style="position: absolute; top: 60px; left: 50%; transform: translateX(-50%); transition: transform 0.3s ease;">NO</button>
+                </div>
+                <div class="answer-display" id="specialAnswer" style="margin-top: 1rem;"></div>
+            </div>
+        </div>
+
+        <!-- Exempted Question Modal -->
+        <div class="message-modal" id="exemptedQuestion" style="display: none;">
+            <div class="message-content">
+                <h2>📚 Final Question 📚</h2>
+                <div class="question" style="color: #ff1493; margin-bottom: 2rem;">EXEMPTED BA KAMI SIR SA EXAM?</div>
+                <div class="answer-buttons" style="flex-direction: column; align-items: center; gap: 2rem;">
+                    <button class="btn" onclick="answerExemptedYes()" style="font-size: 2rem; padding: 30px 80px; width: 300px; height: 100px;">YES</button>
+                    <button class="btn no" onclick="answerExemptedNo()" style="font-size: 0.8rem; padding: 5px 10px; width: 50px; height: 30px;">NO</button>
+                </div>
+                <div class="answer-display" id="exemptedAnswer" style="margin-top: 1rem;"></div>
+            </div>
+        </div>
+
+        <!-- Special Message Modal -->
+        <div class="message-modal" id="specialMessageModal" style="display: none;">
+            <div class="message-content">
+                <h2>🎉 Special Message 🎉</h2>
+                <p style="font-size: 1.3rem; color: #333; line-height: 1.6; margin-bottom: 2rem;">
+                    "IBABA ANG PRESYO NG FOOTSACK,<br>
+                    PATAYIN ANG AIRCON,<br>
+                    IBABA ANG PRESYO NG FISHBALL SA MAC<br>
+                    HAHAAHAH"
+                </p>
+                <button class="btn" onclick="showFinalMessage()" style="background: linear-gradient(45deg, #ff69b4, #ff1493); margin: 10px; padding: 12px 20px; border-radius: 25px; font-size: 1rem;">OPEN IF YOU WILL NOT MET US NEXT MEETING</button>
+            </div>
+        </div>
+
+        <!-- Final Section (Hidden until the end) -->
+        <div class="final-section" id="finalSection" style="display: none;">
+            <div class="balloons">
+                <div class="balloon balloon1">🎈</div>
+                <div class="balloon balloon2">🎈</div>
+                <div class="balloon balloon3">🎈</div>
+                <div class="balloon balloon4">🎈</div>
+                <div class="balloon balloon5">🎈</div>
+            </div>
+            <h2 style="position: relative; z-index: 2;">Thank You So Much, Sir! 🙏💕</h2>
+            <p style="font-size: 1.4rem; line-height: 1.8; margin-bottom: 2rem; position: relative; z-index: 2;">
+                Dear Sir, you are not just a teacher but a true inspiration and mentor to all of us! 
+                Your patience, wisdom, and dedication have touched our hearts in ways we can never fully express. 
+                You make learning fun and exciting, and you always believe in us even when we don't believe in ourselves.
+            </p>
+            <p style="font-size: 1.3rem; line-height: 1.7; margin-bottom: 2rem; position: relative; z-index: 2;">
+                Thank you for your endless support, for answering our countless questions with a smile, 
+                and for making every lesson memorable. You've shaped not just our minds but our characters too. 
+                Your kindness and understanding have made such a difference in our lives, and we are so lucky to have you as our teacher!
+            </p>
+            <p style="font-size: 1.3rem; line-height: 1.7; margin-bottom: 2rem; position: relative; z-index: 2;">
+                We promise to carry all the valuable lessons you've taught us throughout our lives. 
+                You've shown us that learning is a beautiful journey, and with your guidance, 
+                we've grown not just academically but as better human beings. 
+                Your impact on our lives will last forever! 💖
+            </p>
+            <div class="hearts">💕 💖 💗 💝 💘 💞 💓</div>
+            <p style="margin-top: 2rem; font-size: 1.4rem; font-weight: bold; position: relative; z-index: 2;">
+                With all our love, gratitude, and respect,<br>
+                Your forever grateful students! 🌟✨💕
+            </p>
+            <p style="margin-top: 1rem; font-size: 1.2rem; font-style: italic; position: relative; z-index: 2;">
+                "A teacher like you is a blessing that lasts a lifetime!" 🙏💕
+            </p>
+        </div>
+    </div>
+
+    <script>
+        function openEnvelope() {
+            document.getElementById('envelope').classList.add('opened');
+            setTimeout(() => {
+                document.getElementById('messageModal').style.display = 'flex';
+            }, 500);
+        }
+
+        function closeMessage() {
+            document.getElementById('messageModal').style.display = 'none';
+        }
+
+
+
+        let noClickAttempts = 0;
+
+        function showPresidentMessage() {
+            // Hide the message modal and show the special question
+            document.getElementById('messageModal').style.display = 'none';
+            document.getElementById('specialQuestion').style.display = 'flex';
+        }
+
+        function answerSpecialYes() {
+            document.getElementById('specialAnswer').innerHTML = '✨ "ALAM KO SIR DUGAY NA" ✨';
+            setTimeout(() => {
+                document.getElementById('specialQuestion').style.display = 'none';
+                document.getElementById('exemptedQuestion').style.display = 'flex';
+            }, 2000);
+        }
+
+        function answerSpecialNo() {
+            noClickAttempts++;
+            if (noClickAttempts < 5) {
+                // Move the NO button to a random position
+                const noBtn = document.getElementById('specialNoBtn');
+                const randomX = Math.random() * 300;
+                const randomY = Math.random() * 200;
+                noBtn.style.transform = `translate(${randomX}px, ${randomY}px)`;
+                
+                // Show a teasing message
+                document.getElementById('specialAnswer').innerHTML = '😏 "Hala! Nag move ang button! Try again!" 😏';
+            } else {
+                // After 5 attempts, allow the click
+                document.getElementById('specialAnswer').innerHTML = '💖 "NO WAY HINDI LANG MAGANDA,<br>KUNDI PINAKAMAGANDA SA BALAT NG LUPA" 💖';
+                setTimeout(() => {
+                    document.getElementById('specialQuestion').style.display = 'none';
+                    document.getElementById('exemptedQuestion').style.display = 'flex';
+                }, 2000);
+            }
+        }
+
+        function answerExemptedYes() {
+            document.getElementById('exemptedAnswer').innerHTML = '🙏 "THANKS SIR MAY PLUS ONE KA SA LANGIT" 🙏';
+            setTimeout(() => {
+                document.getElementById('exemptedQuestion').style.display = 'none';
+                document.getElementById('specialMessageModal').style.display = 'flex';
+            }, 2000);
+        }
+
+        function answerExemptedNo() {
+            document.getElementById('exemptedAnswer').innerHTML = '😏 "I CLICK ANAY SIR AN YES PARA MABASA MO AN MESSAGE KO SAIMO,<br>AYAW MO SIR, EDI DON\'T." 😏<br><br><button class="btn" onclick="backToFinalQuestion()" style="margin-top: 1rem;">BACK TO FINAL QUESTION</button>';
+        }
+
+        function backToFinalQuestion() {
+            document.getElementById('exemptedAnswer').innerHTML = '';
+        }
+
+        function showFinalMessage() {
+            document.getElementById('specialMessageModal').style.display = 'none';
+            document.getElementById('finalSection').style.display = 'block';
+            document.getElementById('finalSection').scrollIntoView({ behavior: 'smooth' });
+        }
+
+        // Auto-hide greeting after animation
+        setTimeout(() => {
+            document.getElementById('greetingOverlay').style.display = 'none';
+        }, 4000);
+    </script>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'984702c3c29ebc55',t:'MTc1ODc2NjQ5Ni4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>
